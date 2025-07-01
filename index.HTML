@@ -1,32 +1,342 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>My Portfolio</title>
-  <link rel="stylesheet" href="style.css" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>My Profile with Tic Tac Toe</title>
+  <style>
+    /* Basic reset */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #f5f7fa, #c3cfe2);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding-bottom: 40px;
+    }
+
+    header {
+      width: 100%;
+      background-color: #4a90e2;
+      color: white;
+      padding: 15px 0;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+      display: flex;
+      justify-content: center;
+      gap: 50px;
+      font-weight: bold;
+      font-size: 1.5rem;
+      user-select: none;
+    }
+    header div {
+      cursor: pointer;
+      transition: color 0.3s ease;
+    }
+    header div:hover {
+      color: #a8d0ff;
+    }
+
+    .profile-pic {
+      margin: 30px 0 20px 0;
+      width: 150px;
+      height: 150px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 5px solid white;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+      transition: transform 0.3s ease;
+    }
+    .profile-pic:hover {
+      transform: scale(1.05);
+      box-shadow: 0 8px 15px rgba(0,0,0,0.3);
+    }
+
+    .aesthetic-box {
+      background: rgba(255, 255, 255, 0.8);
+      border-radius: 20px;
+      box-shadow: 0 8px 30px rgba(0,0,0,0.1);
+      width: 300px;
+      padding: 25px 20px;
+      text-align: center;
+      font-size: 1.1rem;
+      color: #333;
+      backdrop-filter: blur(10px);
+      transition: box-shadow 0.3s ease;
+      margin-bottom: 20px;
+    }
+    .aesthetic-box:hover {
+      box-shadow: 0 12px 40px rgba(74,144,226,0.5);
+    }
+
+    .section-header {
+      margin-top: 30px;
+      font-size: 1.5rem;
+      color: #4a90e2;
+      font-weight: 600;
+      text-align: center;
+    }
+    .section-content {
+      max-width: 320px;
+      background: rgba(255, 255, 255, 0.85);
+      border-radius: 15px;
+      padding: 15px 20px;
+      margin: 10px auto 0 auto;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.1);
+      color: #444;
+      font-size: 1rem;
+      backdrop-filter: blur(8px);
+    }
+
+    /* Details box style */
+    .details-box {
+      background: rgba(255, 255, 255, 0.85);
+      max-width: 320px;
+      margin: 30px auto;
+      padding: 20px 25px;
+      border-radius: 20px;
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+      color: #333;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      text-align: left;
+      backdrop-filter: blur(10px);
+      transition: box-shadow 0.3s ease;
+    }
+    .details-box:hover {
+      box-shadow: 0 12px 40px rgba(74, 144, 226, 0.5);
+    }
+    .details-box h2 {
+      color: #4a90e2;
+      margin-bottom: 15px;
+      text-align: center;
+    }
+    .details-box p {
+      font-size: 1rem;
+      margin: 8px 0;
+    }
+    .details-box strong {
+      color: #4a90e2;
+    }
+
+    /* Tic Tac Toe styles */
+    #ticTacToe {
+      display: none; /* hidden by default */
+      margin: 20px auto;
+      max-width: 320px;
+      background: rgba(255, 255, 255, 0.9);
+      border-radius: 15px;
+      padding: 15px;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+      backdrop-filter: blur(8px);
+      text-align: center;
+    }
+    #board {
+      display: grid;
+      grid-template-columns: repeat(3, 80px);
+      grid-template-rows: repeat(3, 80px);
+      gap: 10px;
+      justify-content: center;
+      margin: 20px 0;
+    }
+    .cell {
+      width: 80px;
+      height: 80px;
+      background: #4a90e2;
+      border-radius: 12px;
+      font-size: 3rem;
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      user-select: none;
+      transition: background 0.3s ease;
+    }
+    .cell:hover {
+      background: #6ca0ff;
+    }
+    #status {
+      font-weight: 600;
+      color: #333;
+      min-height: 24px;
+    }
+    #resetBtn {
+      background-color: #4a90e2;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      font-size: 1rem;
+      border-radius: 12px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+      margin-top: 10px;
+    }
+    #resetBtn:hover {
+      background-color: #3571c1;
+    }
+  </style>
 </head>
 <body>
-  <div class="container">
-    <div class="profile-image">
-      <img src="cat.jpg" alt="Your Photo" id="profile-pic" />
-    </div>
-    <div class="intro">
-      <h1 id="name">MAHNOOR
 
-      </h1>
-      <p id="description">
-        Hi! I'm a passionate developer with a love for building web applications and learning new technologies.
-      </p>
-    </div>
+  <header>
+    <div id="gamesBtn">Games</div>
+    <div>Map</div>
+    <div>Portfolio</div>
+  </header>
+
+  <img src="cat.jpg" alt="Profile Picture" class="profile-pic" />
+
+  <div class="aesthetic-box">
+    <h2>mahnoor</h2>
+    <p>Welcome to my personal website. I love design, coding, and sharing ideas.</p>
   </div>
 
-  <script src="script.js"></script>
+  <!-- Tic Tac Toe game container -->
+  <div id="ticTacToe">
+    <h3>Tic Tac Toe</h3>
+    <div id="board">
+      <!-- 9 cells -->
+      <div class="cell" data-index="0"></div>
+      <div class="cell" data-index="1"></div>
+      <div class="cell" data-index="2"></div>
+      <div class="cell" data-index="3"></div>
+      <div class="cell" data-index="4"></div>
+      <div class="cell" data-index="5"></div>
+      <div class="cell" data-index="6"></div>
+      <div class="cell" data-index="7"></div>
+      <div class="cell" data-index="8"></div>
+    </div>
+    <div id="status"></div>
+    <button id="resetBtn">Reset Game</button>
+  </div>
+
+  <h3 class="section-header">Games</h3>
+  <div class="section-content">
+    <p>Check out some of my favorite games and projects related to gaming.</p>
+  </div>
+
+  <h3 class="section-header">Map</h3>
+  <div class="section-content">
+    <p>Interactive maps and location-based projects I’ve worked on.</p>
+  </div>
+
+  <h3 class="section-header">Portfolio</h3>
+  <div class="section-content">
+    <p>A showcase of my work, designs, and coding projects.</p>
+  </div>
+
+  <!-- My Details box -->
+  <div class="details-box">
+    <h2>My Details</h2>
+    <p><strong>Email:</strong> your.email@example.com</p>
+    <p><strong>Address:</strong> 123 Your Street, Your City, Your Country</p>
+    <p><strong>Phone:</strong> +1 (234) 567-8901</p>
+  </div>
+
+  <script>
+    const gamesBtn = document.getElementById('gamesBtn');
+    const ticTacToe = document.getElementById('ticTacToe');
+    const cells = document.querySelectorAll('.cell');
+    const statusDiv = document.getElementById('status');
+    const resetBtn = document.getElementById('resetBtn');
+
+    let board = ["", "", "", "", "", "", "", "", ""];
+    let currentPlayer = "X";
+    let gameActive = false;
+
+    // Winning combinations indices
+    const winningConditions = [
+      [0,1,2],[3,4,5],[6,7,8],  // rows
+      [0,3,6],[1,4,7],[2,5,8],  // columns
+      [0,4,8],[2,4,6]           // diagonals
+    ];
+
+    // Show/hide Tic Tac Toe on Games click
+    gamesBtn.addEventListener('click', () => {
+      if(ticTacToe.style.display === 'none' || ticTacToe.style.display === '') {
+        ticTacToe.style.display = 'block';
+        startGame();
+      } else {
+        ticTacToe.style.display = 'none';
+        resetGame();
+      }
+    });
+
+    // Start/reset game function
+    function startGame() {
+      board.fill("");
+      currentPlayer = "X";
+      gameActive = true;
+      statusDiv.textContent = `Player ${currentPlayer}'s turn`;
+      cells.forEach(cell => {
+        cell.textContent = "";
+        cell.style.pointerEvents = "auto";
+      });
+    }
+
+    function resetGame() {
+      board.fill("");
+      currentPlayer = "X";
+      gameActive = false;
+      statusDiv.textContent = "";
+      cells.forEach(cell => {
+        cell.textContent = "";
+        cell.style.pointerEvents = "none";
+      });
+    }
+
+    // Cell click handler
+    cells.forEach(cell => {
+      cell.addEventListener('click', () => {
+        const index = cell.getAttribute('data-index');
+        if (board[index] !== "" || !gameActive) return;
+
+        board[index] = currentPlayer;
+        cell.textContent = currentPlayer;
+
+        if (checkWin()) {
+          statusDiv.textContent = `Player ${currentPlayer} wins! 🎉`;
+          gameActive = false;
+          disableCells();
+          return;
+        }
+        if (board.every(cell => cell !== "")) {
+          statusDiv.textContent = `It's a draw! 🤝`;
+          gameActive = false;
+          return;
+        }
+        // Switch player
+        currentPlayer = currentPlayer === "X" ? "O" : "X";
+        statusDiv.textContent = `Player ${currentPlayer}'s turn`;
+      });
+    });
+
+    // Disable clicking on cells after game ends
+    function disableCells() {
+      cells.forEach(cell => cell.style.pointerEvents = "none");
+    }
+
+    // Check win function
+    function checkWin() {
+      return winningConditions.some(condition => {
+        const [a,b,c] = condition;
+        return board[a] !== "" && board[a] === board[b] && board[b] === board[c];
+      });
+    }
+
+    // Reset button click
+    resetBtn.addEventListener('click', startGame);
+
+    // Initialize hidden game on page load
+    resetGame();
+  </script>
+
 </body>
 </html>
-<div class="contact-details">
-  <p><strong>Email:</strong> <a href="mailto:your.email@example.com">your.email@example.com</a></p>
-  <p><strong>Phone:</strong> <a href="tel:+1234567890">+1 (234) 567-890</a></p>
-  <p><strong>Address:</strong> Your Street Address, City, State, ZIP Code</p>
-</div>
-</div><button type="hi mate">Click Me!</button>
